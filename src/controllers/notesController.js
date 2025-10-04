@@ -38,9 +38,9 @@ export const deleteNote = async (req, res, next) => {
 };
 
 export const updateNote = async (req, res, next) => {
-  const { noteIdId } = req.params;
+  const { noteId } = req.params;
 
-  const note = await Note.findOneAndUpdate({ _id: noteIdId }, req.body, {
+  const note = await Note.findOneAndUpdate({ _id: noteId }, req.body, {
     new: true,
   });
 
