@@ -1,27 +1,14 @@
-import axios from 'axios';
+import nodemailer from 'nodemailer';
+
+const transporter = nodemailer.createTransport({
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASSWORD,
+  },
+});
 
 export const sendEmail = async (options) => {
-  const response = await axios.post(
-    process.env.MAILERSEND_API_URL,
-    {
-      from: {
-        email: options.from || process.env.MAILERSEND_FROM,
-        name: options.fromName || 'Your App',
-      },
-      to: Array.isArray(options.to)
-        ? options.to.map((email) => ({ email }))
-        : [{ email: options.to }],
-      subject: options.subject,
-      text: options.text || '',
-      html: options.html || '',
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.MAILERSEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-    },
-  );
-
-  return response.data;
+  return await transporter.sendMail(options);
 };
